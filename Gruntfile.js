@@ -14,7 +14,10 @@ module.exports = function(grunt) {
             js: {
                base: '<%= project.src.base %>/js',
                main: '<%= project.src.js.base %>/main.js',
-               thirdparty: '<%= project.src.js.base %>/thirdparty.js',
+               thirdparty: [
+                  '<%= project.src.js.base %>/thirdparty.js',
+                  'node_modules/semantic-ui-css/semantic.js',
+               ],
             },
             markup: {
                base: '<%= project.src.base %>/markup',
@@ -24,12 +27,16 @@ module.exports = function(grunt) {
                base: '<%= project.src.base %>/sass',
                main: '<%= project.src.sass.base %>/main.scss',
             },
+            css: {
+               thirdparty: 'node_modules/semantic-ui-css/semantic.css',
+            },
          },
          dist: {
             base: 'dist',
             css: {
                base: '<%= project.dist.base %>/css',
                main: '<%= project.dist.css.base %>/main.css',
+               thirdparty: '<%= project.dist.css.base %>/thirdparty.css',
             },
             js: {
                base: '<%= project.dist.base %>/js',
@@ -111,6 +118,16 @@ module.exports = function(grunt) {
          },
       },
 
+      cssmin: {
+         options: {
+            shorthandCompacting: false,
+            roundingPrecision: -1,
+         },
+         build: {
+            files: { '<%= project.dist.css.thirdparty %>': '<%= project.src.css.thirdparty %>' },
+         },
+      },
+
       eslint: {
          target: [ 'Gruntfile.js', 'src/**/*.js', 'tests/**/*.js' ],
       },
@@ -120,6 +137,7 @@ module.exports = function(grunt) {
 
    grunt.loadNpmTasks('grunt-contrib-copy');
    grunt.loadNpmTasks('grunt-browserify');
+   grunt.loadNpmTasks('grunt-contrib-cssmin');
    grunt.loadNpmTasks('grunt-contrib-uglify');
    grunt.loadNpmTasks('grunt-nunjucks');
    grunt.loadNpmTasks('grunt-sass');
@@ -129,6 +147,7 @@ module.exports = function(grunt) {
    grunt.registerTask('build', [
       'copy:markup',
       'sass:build',
+      'cssmin:build',
       'browserify:build',
       'uglify:build',
       'browserify:thirdparty',
