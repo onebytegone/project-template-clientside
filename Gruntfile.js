@@ -87,14 +87,6 @@ module.exports = function(grunt) {
          },
       },
 
-      copy: {
-         markup: {
-            files: [
-               { expand: true, cwd: '<%= project.src.markup.base %>', src: 'index.html', dest: '<%= project.dist.base %>' },
-            ],
-         },
-      },
-
       nunjucks: {
          build: {
             baseDir: '<%= project.src.markup.base %>/',
@@ -128,15 +120,22 @@ module.exports = function(grunt) {
          },
       },
 
+      copy: {
+         markup: {
+            files: [
+               { expand: true, cwd: '<%= project.src.markup.base %>', src: 'index.html', dest: '<%= project.dist.base %>' },
+            ],
+         },
+      },
+
       eslint: {
          target: [ 'Gruntfile.js', 'src/**/*.js', 'tests/**/*.js' ],
       },
 
    });
 
-
-   grunt.loadNpmTasks('grunt-contrib-copy');
    grunt.loadNpmTasks('grunt-browserify');
+   grunt.loadNpmTasks('grunt-contrib-copy');
    grunt.loadNpmTasks('grunt-contrib-cssmin');
    grunt.loadNpmTasks('grunt-contrib-uglify');
    grunt.loadNpmTasks('grunt-nunjucks');
