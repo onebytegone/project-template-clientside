@@ -115,7 +115,7 @@ module.exports = function(grunt) {
             shorthandCompacting: false,
             roundingPrecision: -1,
          },
-         build: {
+         thirdparty: {
             files: { '<%= project.dist.css.thirdparty %>': '<%= project.src.css.thirdparty %>' },
          },
       },
@@ -132,12 +132,36 @@ module.exports = function(grunt) {
          target: [ 'Gruntfile.js', 'src/**/*.js', 'tests/**/*.js' ],
       },
 
+      watch: {
+         scripts: {
+            files: 'Gruntfile.js',
+            tasks: [ 'build' ],
+         },
+         markup: {
+            files: '<%= project.src.markup.base %>/**/*.html',
+            tasks: [ 'copy:markup', 'nunjucks:build' ],
+         },
+         sass: {
+            files: '<%= project.src.sass.base %>/**/*.scss',
+            tasks: [ 'sass:build' ],
+         },
+         js: {
+            files: [ '<%= project.src.js.base %>/**/*.js', '!<%= project.src.js.thirdparty %>' ],
+            tasks: [ 'browserify:build', 'uglify:build' ],
+         },
+         thirdparty: {
+            files: [ '<%= project.src.js.thirdparty %>', '<%= project.dist.css.thirdparty %>' ],
+            tasks: [ 'cssmin:thirdparty', 'browserify:thirdparty', 'uglify:thirdparty' ],
+         },
+      },
+
    });
 
    grunt.loadNpmTasks('grunt-browserify');
    grunt.loadNpmTasks('grunt-contrib-copy');
    grunt.loadNpmTasks('grunt-contrib-cssmin');
    grunt.loadNpmTasks('grunt-contrib-uglify');
+   grunt.loadNpmTasks('grunt-contrib-watch');
    grunt.loadNpmTasks('grunt-nunjucks');
    grunt.loadNpmTasks('grunt-sass');
    grunt.loadNpmTasks('grunt-eslint');
@@ -146,7 +170,7 @@ module.exports = function(grunt) {
    grunt.registerTask('build', [
       'copy:markup',
       'sass:build',
-      'cssmin:build',
+      'cssmin:thirdparty',
       'browserify:build',
       'uglify:build',
       'browserify:thirdparty',
