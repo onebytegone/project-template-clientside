@@ -4,7 +4,7 @@ var _ = require('underscore'),
     sinon = require('sinon'),
     expect = require('expect.js'),
     rewire = require('rewire'),
-    App = rewire('../src/App.js');
+    App = rewire('../../src/js/controllers/App.js');
 
 describe('App', function() {
    var fakeConsole = { log: _.noop },
@@ -13,6 +13,12 @@ describe('App', function() {
    beforeEach(function() {
       revert = App.__set__({
          console: fakeConsole,
+         $: function() {
+            //TODO: find a better way to mock jQuery
+            return {
+               append: _.noop,
+            };
+         },
       });
    });
 
