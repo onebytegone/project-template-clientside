@@ -8,6 +8,7 @@
   "author": "Ethan Smith",
   "license": "MIT",
   "devDependencies": {
+    "coveralls": "2.13.1",
     "eslint": "3.19.0",
     "eslint-config-silvermine": "1.1.2",
     "expect.js": "0.3.1",
